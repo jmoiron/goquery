@@ -1,6 +1,12 @@
 # goquery - a little like that j-thing, only in Go
 
-[![build status](https://secure.travis-ci.org/PuerkitoBio/goquery.png)](http://travis-ci.org/PuerkitoBio/goquery)
+[![Build
+Status](https://drone.io/github.com/jmoiron/goquery/status.png)](https://drone.io/github.com/jmoiron/goquery/latest)
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/jmoiron/goquery)
+
+This is a fork of Martin Angers's excellent [goquery](http://github.com/PuerkitoBio/goquery).  The sole purpose of this
+fork is to add the `Selection.All` which allows for efficient and clean idiomatic looping over selections.  The
+documentation in this README has been updated to prefer this method.
 
 GoQuery brings a syntax and a set of features similar to [jQuery][] to the [Go language][go]. It is based on Go's [net/html package][html] and the CSS Selector library [cascadia][]. Since the net/html parser returns tokens (nodes), and not a full-featured DOM object, jQuery's manipulation and modification functions have been left off (no point in modifying data in the parsed tree of the HTML, it has no effect).
 
@@ -14,16 +20,16 @@ Syntax-wise, it is as close as possible to jQuery, with the same function names 
 
 Please note that because of the net/html dependency, goquery requires Go1.1+.
 
-    $ go get github.com/PuerkitoBio/goquery
+    $ go get github.com/jmoiron/goquery
 
 (optional) To run unit tests:
     
-    $ cd $GOPATH/src/github.com/PuerkitoBio/goquery
+    $ cd $GOPATH/src/github.com/jmoiron/goquery
     $ go test
 
 (optional) To run benchmarks (warning: it runs for a few minutes):
 
-    $ cd $GOPATH/src/github.com/PuerkitoBio/goquery
+    $ cd $GOPATH/src/github.com/jmoiron/goquery
     $ go test -bench=".*"
 
 ## Changelog
@@ -65,7 +71,7 @@ import (
 
 	// In real use, this import would be required (not in this example, since it
 	// is part of the goquery package)
-	//"github.com/PuerkitoBio/goquery"
+	//"github.com/jmoiron/goquery"
 )
 
 // This example scrapes the reviews shown on the home page of metalsucks.net.
@@ -74,18 +80,18 @@ func ExampleScrape_MetalSucks() {
 	var doc *Document
 	var e error
 	
-        // Initialize doc, (in real use, the method would be goquery.NewDocument)
+  // Initialize doc, (in real use, the method would be goquery.NewDocument)
 	if doc, e = NewDocument("http://metalsucks.net"); e != nil {
 		log.Fatal(e)
 	}
 
 	// Find the review items (the type of the Selection would be *goquery.Selection)
-	doc.Find(".reviews-wrap article .review-rhs").Each(func(i int, s *Selection) {
+	for i, s := range doc.Find(".reviews-wrap article .review-rhs").All() {
 		// For each item found, get the band and title
 		band := s.Find("h3").Text()
 		title := s.Find("i").Text()
 		fmt.Printf("Review %d: %s - %s\n", i, band, title)
-	})
+	}
 	// To see the output of the Example while running the test suite (go test), simply
 	// remove the leading "x" before Output on the next line. This will cause the
 	// example to fail (all the "real" tests should pass).
@@ -104,7 +110,7 @@ The [BSD 3-Clause license][bsd], the same as the [Go language][golic]. Cascadia'
 [bsd]: http://opensource.org/licenses/BSD-3-Clause
 [golic]: http://golang.org/LICENSE
 [caslic]: http://code.google.com/p/cascadia/source/browse/LICENSE
-[doc]: http://godoc.org/github.com/PuerkitoBio/goquery
+[doc]: http://godoc.org/github.com/jmoiron/goquery
 [index]: http://api.jquery.com/index/
 [gonet]: http://code.google.com/p/go/source/detail?r=f7f5159120f51ba0070774d3c5907969b5fe7858&repo=net
 [html]: http://godoc.org/code.google.com/p/go.net/html
